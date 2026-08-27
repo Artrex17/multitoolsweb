@@ -1,14 +1,54 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
 import { tools } from '../../i18n/strings';
 ---
 
-<Layout lang="en" title="Free online tools — Tools" description="Convert images, format data, and generate QR codes, hashes, UUIDs and passwords, all in your browser.">
-  <h1>Free online tools</h1>
-  <p>Everything runs in your browser: your files are never uploaded to a server.</p>
-  <ul>
+<Layout lang="en" title="multitools — free online tool panel" description="Convert images, format data, and generate QR codes, hashes, UUIDs and passwords, all in your browser.">
+  <Hero lang="en" />
+  <div class="grid">
     {tools.en.map((tool) => (
-      <li><a href={tool.href}>{tool.label}</a></li>
+      <a class="tool-plate" href={tool.href}>
+        <span class="dot"></span>
+        {tool.label}
+      </a>
     ))}
-  </ul>
+  </div>
 </Layout>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 0.9rem;
+  }
+  .tool-plate {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    background: var(--bone-high);
+    border-radius: var(--radius-panel);
+    box-shadow: var(--shadow-raised-sm);
+    padding: 1.1rem 1.25rem;
+    text-decoration: none;
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+  .tool-plate:hover {
+    transform: translateY(-2px);
+  }
+  .tool-plate:active {
+    transform: translateY(1px);
+    box-shadow: var(--shadow-pressed);
+  }
+  .dot {
+    flex-shrink: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 5px 1px rgba(226, 140, 46, 0.6);
+  }
+</style>

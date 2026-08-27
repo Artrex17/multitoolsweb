@@ -1,0 +1,87 @@
+---
+import type { Lang } from '../i18n/strings';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const t = {
+  es: {
+    eyebrow: 'panel de instrumentos',
+    heading: 'multitools',
+    sub: 'Convierte, formatea y genera — todo se procesa en tu navegador. Nada se sube a ningún servidor.',
+  },
+  en: {
+    eyebrow: 'instrument panel',
+    heading: 'multitools',
+    sub: 'Convert, format and generate — everything runs in your browser. Nothing is ever uploaded.',
+  },
+}[lang];
+
+const readouts = [
+  'a3f5e91c…d8b2',
+  '550e8400-e29b-4d1a',
+  '1536×1024 → 512×384',
+  'JSON → CSV ✓',
+  'SHA-256 READY',
+  'Tq9$mK2vLp7&Zw',
+];
+---
+
+<section class="hero">
+  <p class="eyebrow">{t.eyebrow}</p>
+  <h1>{t.heading}</h1>
+  <p class="sub">{t.sub}</p>
+  <div class="screen hero-screen" id="hero-screen" aria-hidden="true">
+    <span id="hero-readout">{readouts[0]}</span>
+  </div>
+</section>
+
+<script is:inline define:vars={{ readouts }}>
+  const el = document.querySelector('#hero-readout');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (el && !prefersReducedMotion) {
+    let i = 0;
+    setInterval(() => {
+      i = (i + 1) % readouts.length;
+      el.style.opacity = '0';
+      setTimeout(() => {
+        el.textContent = readouts[i];
+        el.style.opacity = '1';
+      }, 200);
+    }, 2200);
+  }
+</script>
+
+<style>
+  .hero {
+    padding: 0.5rem 0 0.5rem;
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-size: clamp(2.2rem, 6vw, 3.4rem);
+    margin-bottom: 0.4rem;
+  }
+  .sub {
+    max-width: 46ch;
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+  }
+  .hero-screen {
+    margin-top: 1.25rem;
+    max-width: 380px;
+    font-size: 1.1rem;
+  }
+  .hero-screen span {
+    display: inline-block;
+    transition: opacity 0.2s ease;
+  }
+</style>

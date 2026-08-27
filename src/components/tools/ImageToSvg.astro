@@ -24,14 +24,16 @@ const t = {
 }[lang];
 ---
 
-<section class="tool">
+<section class="panel tool">
   <h1>{t.heading}</h1>
   <form id="svg-form">
     <label>{t.file}<input type="file" id="file" accept="image/png,image/jpeg" required /></label>
-    <button type="submit">{t.convert}</button>
+    <div class="actions">
+      <button class="btn btn-primary" type="submit">{t.convert}</button>
+    </div>
   </form>
-  <p id="error" role="alert" hidden>{t.error}</p>
-  <a id="download" hidden download>{t.download}</a>
+  <p class="error-strip" id="error" role="alert" hidden>{t.error}</p>
+  <a class="btn" id="download" hidden download>{t.download}</a>
 </section>
 
 <script>

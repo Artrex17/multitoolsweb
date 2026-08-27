@@ -22,31 +22,34 @@ const t = {
 }[lang];
 ---
 
-<section class="tool">
+<section class="panel tool">
   <h1>{t.heading}</h1>
   <form id="hash-form">
     <label>{t.input}<textarea id="text" rows="6"></textarea></label>
-    <label>{t.algorithm}
-      <select id="algorithm">
-        <option value="SHA-256">SHA-256</option>
-        <option value="SHA-512">SHA-512</option>
-      </select>
+    <label>
+      {t.algorithm}
+      <div class="rocker">
+        <label class="rocker-option"><input type="radio" name="algorithm" value="SHA-256" checked /><span>SHA-256</span></label>
+        <label class="rocker-option"><input type="radio" name="algorithm" value="SHA-512" /><span>SHA-512</span></label>
+      </div>
     </label>
-    <button type="submit">{t.generate}</button>
+    <div class="actions">
+      <button class="btn btn-primary" type="submit">{t.generate}</button>
+    </div>
   </form>
-  <output id="result" style="display:block; font-family: monospace; word-break: break-all;"></output>
+  <p class="screen" id="result"></p>
 </section>
 
 <script>
   import { hashText, type HashAlgorithm } from '../../lib/hash';
 
   const form = document.querySelector<HTMLFormElement>('#hash-form')!;
-  const resultEl = document.querySelector<HTMLOutputElement>('#result')!;
+  const resultEl = document.querySelector<HTMLParagraphElement>('#result')!;
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const text = document.querySelector<HTMLTextAreaElement>('#text')!.value;
-    const algorithm = document.querySelector<HTMLSelectElement>('#algorithm')!.value as HashAlgorithm;
+    const algorithm = document.querySelector<HTMLInputElement>('input[name="algorithm"]:checked')!.value as HashAlgorithm;
     resultEl.textContent = await hashText(text, algorithm);
   });
 </script>

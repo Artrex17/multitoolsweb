@@ -26,17 +26,17 @@ const t = {
 }[lang];
 ---
 
-<section class="tool">
+<section class="panel tool">
   <h1>{t.heading}</h1>
   <div class="grid">
     <label>{t.jsonLabel}<textarea id="json" rows="12"></textarea></label>
     <label>{t.csvLabel}<textarea id="csv" rows="12"></textarea></label>
   </div>
   <div class="actions">
-    <button id="to-csv" type="button">{t.toCsv}</button>
-    <button id="to-json" type="button">{t.toJson}</button>
+    <button class="btn btn-primary" id="to-csv" type="button">{t.toCsv}</button>
+    <button class="btn btn-primary" id="to-json" type="button">{t.toJson}</button>
   </div>
-  <p id="error" role="alert" hidden>{t.error}</p>
+  <p class="error-strip" id="error" role="alert" hidden>{t.error}</p>
 </section>
 
 <style>
@@ -45,9 +45,10 @@ const t = {
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
   }
-  textarea {
-    width: 100%;
-    font-family: monospace;
+  @media (max-width: 640px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
 

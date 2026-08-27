@@ -22,15 +22,38 @@ const t = {
 }[lang];
 ---
 
-<section class="tool">
+<section class="panel tool">
   <h1>{t.heading}</h1>
   <form id="qr-form">
     <label>{t.input}<input type="text" id="text" required /></label>
-    <button type="submit">{t.generate}</button>
+    <div class="actions">
+      <button class="btn btn-primary" type="submit">{t.generate}</button>
+    </div>
   </form>
-  <p id="error" role="alert" hidden>{t.error}</p>
-  <div id="qr-output"></div>
+  <p class="error-strip" id="error" role="alert" hidden>{t.error}</p>
+  <div class="qr-screen" id="qr-output"></div>
 </section>
+
+<style>
+  .qr-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 280px;
+    padding: 1.25rem;
+    background: #fff;
+    border-radius: var(--radius-key);
+    box-shadow: var(--shadow-pressed);
+  }
+  .qr-screen:empty {
+    display: none;
+  }
+  .qr-screen :global(svg) {
+    width: 100%;
+    height: auto;
+    max-width: 220px;
+  }
+</style>
 
 <script>
   import { generateQrSvg } from '../../lib/qr';

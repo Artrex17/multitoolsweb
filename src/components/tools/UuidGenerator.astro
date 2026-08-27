@@ -12,10 +12,12 @@ const t = {
 }[lang];
 ---
 
-<section class="tool">
+<section class="panel tool">
   <h1>{t.heading}</h1>
-  <button id="generate" type="button">{t.generate}</button>
-  <output id="result" style="display:block; font-family: monospace;"></output>
+  <div class="actions">
+    <button class="btn btn-primary" id="generate" type="button">{t.generate}</button>
+  </div>
+  <p class="screen" id="result"></p>
 </section>
 
 <script>

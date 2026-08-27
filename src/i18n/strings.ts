@@ -2,22 +2,12 @@ export type Lang = 'es' | 'en';
 
 export const common = {
   es: {
-    siteName: 'Herramientas',
-    home: 'Inicio',
-    imageCategory: 'Imagen',
-    dataCategory: 'Datos y texto',
-    generatorsCategory: 'Generadores',
-    downloadResult: 'Descargar resultado',
-    languageSwitch: 'English',
+    languageSwitch: 'EN',
+    menuLabel: 'Herramientas',
   },
   en: {
-    siteName: 'Tools',
-    home: 'Home',
-    imageCategory: 'Image',
-    dataCategory: 'Data & text',
-    generatorsCategory: 'Generators',
-    downloadResult: 'Download result',
-    languageSwitch: 'Español',
+    languageSwitch: 'ES',
+    menuLabel: 'Tools',
   },
 } as const;
 

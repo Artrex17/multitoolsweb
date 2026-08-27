@@ -14,21 +14,27 @@ const otherLangHref = toolIndex === -1 ? `/${otherLang}/` : tools[otherLang][too
 ---
 
 <header class="site-header">
-  <a class="brand" href={`/${lang}/`}>{t.siteName}</a>
-  <nav>
+  <a class="brand" href={`/${lang}/`}>
+    <span class="brand-led"></span>
+    multitools
+  </a>
+  <nav class="nav-menu">
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+    <label for="nav-toggle" class="nav-summary">{t.menuLabel}</label>
     <ul>
       {items.map((item) => (
         <li>
-          <a href={item.href} aria-current={currentPath === item.href ? 'page' : undefined}>
+          <a href={item.href} class:list={['nav-pill', { active: currentPath === item.href }]}>
             {item.label}
           </a>
         </li>
       ))}
     </ul>
   </nav>
-  <a class="lang-switch" href={otherLangHref}>
-    {t.languageSwitch}
-  </a>
+  <div class="lang-rocker" role="group" aria-label="Language">
+    <a href={lang === 'es' ? currentPath : otherLangHref} aria-current={lang === 'es' ? 'true' : undefined}>ES</a>
+    <a href={lang === 'en' ? currentPath : otherLangHref} aria-current={lang === 'en' ? 'true' : undefined}>EN</a>
+  </div>
 </header>
 
 <style>
@@ -36,34 +42,138 @@ const otherLangHref = toolIndex === -1 ? `/${otherLang}/` : tools[otherLang][too
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    padding: 1rem;
-    border-bottom: 1px solid #ddd;
-  }
-  .brand {
-    font-weight: bold;
-    font-size: 1.2rem;
-    text-decoration: none;
-    color: inherit;
-  }
-  nav ul {
-    display: flex;
+    padding: 0.85rem 1.5rem;
+    background: var(--ink);
+    color: var(--bone-high);
     flex-wrap: wrap;
-    gap: 0.75rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    font-size: 0.9rem;
   }
-  nav a {
-    color: inherit;
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
     text-decoration: none;
+    color: var(--bone-high);
   }
-  nav a:hover,
-  nav a[aria-current='page'] {
-    text-decoration: underline;
+
+  .brand-led {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 6px 2px rgba(226, 140, 46, 0.7);
   }
-  .lang-switch {
+
+  .nav-menu {
+    flex: 1;
+  }
+
+  .nav-toggle {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .nav-summary {
+    display: inline-block;
+    margin: 0;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--bone-high);
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--radius-pill);
+    background: rgba(245, 241, 230, 0.08);
+  }
+
+  .nav-summary::after {
+    content: ' ▾';
+  }
+
+  .nav-toggle:checked + .nav-summary::after {
+    content: ' ▴';
+  }
+
+  .nav-toggle:focus-visible + .nav-summary {
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+  }
+
+  .nav-menu ul {
+    display: none;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 0.6rem 0 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  .nav-toggle:checked ~ ul {
+    display: flex;
+  }
+
+  @media (min-width: 901px) {
+    .nav-summary {
+      display: none;
+    }
+    .nav-menu ul {
+      display: flex !important;
+      margin: 0;
+      width: auto;
+    }
+  }
+
+  .nav-pill {
+    display: inline-block;
+    color: rgba(245, 241, 230, 0.72);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--radius-pill);
+    transition: background 0.12s ease, color 0.12s ease;
+  }
+
+  .nav-pill:hover {
+    background: rgba(245, 241, 230, 0.08);
+    color: var(--bone-high);
+  }
+
+  .nav-pill.active {
+    background: var(--amber);
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .lang-rocker {
     margin-left: auto;
-    font-size: 0.9rem;
+    display: inline-flex;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: var(--radius-pill);
+    padding: 3px;
+    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .lang-rocker a {
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(245, 241, 230, 0.6);
+    padding: 0.35rem 0.7rem;
+    border-radius: var(--radius-pill);
+  }
+
+  .lang-rocker a[aria-current='true'] {
+    background: var(--amber);
+    color: var(--ink);
+    box-shadow: var(--shadow-raised-sm);
   }
 </style>

@@ -11,41 +11,37 @@ const t = {
     heading: 'Contador de palabras y caracteres',
     input: 'Escribe o pega tu texto aquí',
     words: 'Palabras',
-    chars: 'Caracteres (con espacios)',
-    charsNoSpaces: 'Caracteres (sin espacios)',
+    chars: 'Caracteres',
+    charsNoSpaces: 'Sin espacios',
   },
   en: {
     heading: 'Word & character counter',
     input: 'Type or paste your text here',
     words: 'Words',
-    chars: 'Characters (with spaces)',
-    charsNoSpaces: 'Characters (no spaces)',
+    chars: 'Characters',
+    charsNoSpaces: 'No spaces',
   },
 }[lang];
 ---
 
-<section class="tool">
+<section class="panel tool">
   <h1>{t.heading}</h1>
   <label>{t.input}<textarea id="text" rows="12"></textarea></label>
-  <dl>
-    <dt>{t.words}</dt>
-    <dd id="words">0</dd>
-    <dt>{t.chars}</dt>
-    <dd id="chars">0</dd>
-    <dt>{t.charsNoSpaces}</dt>
-    <dd id="chars-no-spaces">0</dd>
-  </dl>
+  <div class="counters">
+    <span class="screen-mini">{t.words} <strong id="words">0</strong></span>
+    <span class="screen-mini">{t.chars} <strong id="chars">0</strong></span>
+    <span class="screen-mini">{t.charsNoSpaces} <strong id="chars-no-spaces">0</strong></span>
+  </div>
 </section>
 
 <style>
-  textarea {
-    width: 100%;
-    font-family: inherit;
-  }
-  dl {
-    display: grid;
-    grid-template-columns: max-content max-content;
-    gap: 0.25rem 1rem;
+  .counters {
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+    font-weight: 600;
+    color: var(--ink-soft);
   }
 </style>
 

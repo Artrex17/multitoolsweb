@@ -24,22 +24,15 @@ const t = {
 }[lang];
 ---
 
-<section class="tool">
+<section class="panel tool">
   <h1>{t.heading}</h1>
   <label>{t.input}<textarea id="json" rows="16"></textarea></label>
   <div class="actions">
-    <button id="format" type="button">{t.format}</button>
-    <button id="minify" type="button">{t.minify}</button>
+    <button class="btn btn-primary" id="format" type="button">{t.format}</button>
+    <button class="btn" id="minify" type="button">{t.minify}</button>
   </div>
-  <p id="error" role="alert" hidden>{t.error}</p>
+  <p class="error-strip" id="error" role="alert" hidden>{t.error}</p>
 </section>
-
-<style>
-  textarea {
-    width: 100%;
-    font-family: monospace;
-  }
-</style>
 
 <script>
   import { formatJson, minifyJson } from '../../lib/json-format';
