@@ -1,0 +1,49 @@
+---
+interface Props {
+  slot: string;
+  variant: 'sidebar' | 'horizontal';
+}
+const { slot, variant } = Astro.props;
+const isDev = import.meta.env.DEV;
+---
+
+{isDev ? (
+  <div class:list={['ad-slot', 'ad-placeholder', variant]}>Anuncio ({variant})</div>
+) : (
+  <div class:list={['ad-slot', variant]}>
+    <ins
+      class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+      data-ad-slot={slot}
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    />
+    <script is:inline>
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+)}
+
+<style>
+  .ad-slot.sidebar {
+    position: sticky;
+    top: 1rem;
+    width: 160px;
+    min-height: 600px;
+  }
+  .ad-slot.horizontal {
+    width: 100%;
+    min-height: 100px;
+    margin: 1.5rem 0;
+  }
+  .ad-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eee;
+    color: #888;
+    font-size: 0.8rem;
+    border: 1px dashed #ccc;
+  }
+</style>

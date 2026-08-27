@@ -1,0 +1,65 @@
+---
+import type { Lang } from '../../i18n/strings';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const t = {
+  es: {
+    heading: 'Contador de palabras y caracteres',
+    input: 'Escribe o pega tu texto aquí',
+    words: 'Palabras',
+    chars: 'Caracteres (con espacios)',
+    charsNoSpaces: 'Caracteres (sin espacios)',
+  },
+  en: {
+    heading: 'Word & character counter',
+    input: 'Type or paste your text here',
+    words: 'Words',
+    chars: 'Characters (with spaces)',
+    charsNoSpaces: 'Characters (no spaces)',
+  },
+}[lang];
+---
+
+<section class="tool">
+  <h1>{t.heading}</h1>
+  <label>{t.input}<textarea id="text" rows="12"></textarea></label>
+  <dl>
+    <dt>{t.words}</dt>
+    <dd id="words">0</dd>
+    <dt>{t.chars}</dt>
+    <dd id="chars">0</dd>
+    <dt>{t.charsNoSpaces}</dt>
+    <dd id="chars-no-spaces">0</dd>
+  </dl>
+</section>
+
+<style>
+  textarea {
+    width: 100%;
+    font-family: inherit;
+  }
+  dl {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    gap: 0.25rem 1rem;
+  }
+</style>
+
+<script>
+  import { countWords, countChars } from '../../lib/wordcount';
+
+  const textEl = document.querySelector<HTMLTextAreaElement>('#text')!;
+  const wordsEl = document.querySelector('#words')!;
+  const charsEl = document.querySelector('#chars')!;
+  const charsNoSpacesEl = document.querySelector('#chars-no-spaces')!;
+
+  textEl.addEventListener('input', () => {
+    wordsEl.textContent = String(countWords(textEl.value));
+    charsEl.textContent = String(countChars(textEl.value));
+    charsNoSpacesEl.textContent = String(countChars(textEl.value, false));
+  });
+</script>

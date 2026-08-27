@@ -1,0 +1,78 @@
+---
+import type { Lang } from '../../i18n/strings';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const t = {
+  es: {
+    heading: 'JSON ↔ CSV',
+    jsonLabel: 'JSON',
+    csvLabel: 'CSV',
+    toCsv: 'JSON → CSV',
+    toJson: 'CSV → JSON',
+    error: 'Entrada inválida, revisa el formato.',
+  },
+  en: {
+    heading: 'JSON ↔ CSV',
+    jsonLabel: 'JSON',
+    csvLabel: 'CSV',
+    toCsv: 'JSON → CSV',
+    toJson: 'CSV → JSON',
+    error: 'Invalid input, check the format.',
+  },
+}[lang];
+---
+
+<section class="tool">
+  <h1>{t.heading}</h1>
+  <div class="grid">
+    <label>{t.jsonLabel}<textarea id="json" rows="12"></textarea></label>
+    <label>{t.csvLabel}<textarea id="csv" rows="12"></textarea></label>
+  </div>
+  <div class="actions">
+    <button id="to-csv" type="button">{t.toCsv}</button>
+    <button id="to-json" type="button">{t.toJson}</button>
+  </div>
+  <p id="error" role="alert" hidden>{t.error}</p>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  textarea {
+    width: 100%;
+    font-family: monospace;
+  }
+</style>
+
+<script>
+  import { jsonToCsv, csvToJson } from '../../lib/csv';
+
+  const jsonEl = document.querySelector<HTMLTextAreaElement>('#json')!;
+  const csvEl = document.querySelector<HTMLTextAreaElement>('#csv')!;
+  const errorEl = document.querySelector<HTMLParagraphElement>('#error')!;
+
+  document.querySelector('#to-csv')!.addEventListener('click', () => {
+    errorEl.hidden = true;
+    try {
+      csvEl.value = jsonToCsv(jsonEl.value);
+    } catch {
+      errorEl.hidden = false;
+    }
+  });
+
+  document.querySelector('#to-json')!.addEventListener('click', () => {
+    errorEl.hidden = true;
+    try {
+      jsonEl.value = csvToJson(csvEl.value);
+    } catch {
+      errorEl.hidden = false;
+    }
+  });
+</script>

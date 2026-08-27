@@ -1,0 +1,25 @@
+---
+import type { Lang } from '../../i18n/strings';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const t = {
+  es: { heading: 'Generador de UUID', generate: 'Generar UUID' },
+  en: { heading: 'UUID generator', generate: 'Generate UUID' },
+}[lang];
+---
+
+<section class="tool">
+  <h1>{t.heading}</h1>
+  <button id="generate" type="button">{t.generate}</button>
+  <output id="result" style="display:block; font-family: monospace;"></output>
+</section>
+
+<script>
+  document.querySelector('#generate')!.addEventListener('click', () => {
+    document.querySelector('#result')!.textContent = crypto.randomUUID();
+  });
+</script>

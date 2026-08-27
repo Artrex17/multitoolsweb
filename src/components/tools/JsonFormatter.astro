@@ -1,0 +1,67 @@
+---
+import type { Lang } from '../../i18n/strings';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const t = {
+  es: {
+    heading: 'Formatear JSON',
+    input: 'Pega tu JSON aquí',
+    format: 'Formatear',
+    minify: 'Minificar',
+    error: 'JSON inválido.',
+  },
+  en: {
+    heading: 'Format JSON',
+    input: 'Paste your JSON here',
+    format: 'Format',
+    minify: 'Minify',
+    error: 'Invalid JSON.',
+  },
+}[lang];
+---
+
+<section class="tool">
+  <h1>{t.heading}</h1>
+  <label>{t.input}<textarea id="json" rows="16"></textarea></label>
+  <div class="actions">
+    <button id="format" type="button">{t.format}</button>
+    <button id="minify" type="button">{t.minify}</button>
+  </div>
+  <p id="error" role="alert" hidden>{t.error}</p>
+</section>
+
+<style>
+  textarea {
+    width: 100%;
+    font-family: monospace;
+  }
+</style>
+
+<script>
+  import { formatJson, minifyJson } from '../../lib/json-format';
+
+  const jsonEl = document.querySelector<HTMLTextAreaElement>('#json')!;
+  const errorEl = document.querySelector<HTMLParagraphElement>('#error')!;
+
+  document.querySelector('#format')!.addEventListener('click', () => {
+    errorEl.hidden = true;
+    try {
+      jsonEl.value = formatJson(jsonEl.value);
+    } catch {
+      errorEl.hidden = false;
+    }
+  });
+
+  document.querySelector('#minify')!.addEventListener('click', () => {
+    errorEl.hidden = true;
+    try {
+      jsonEl.value = minifyJson(jsonEl.value);
+    } catch {
+      errorEl.hidden = false;
+    }
+  });
+</script>

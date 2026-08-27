@@ -1,0 +1,64 @@
+---
+import type { Lang } from '../../i18n/strings';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const t = {
+  es: {
+    heading: 'PNG/JPEG a SVG (vectorizar)',
+    file: 'Elige una imagen (PNG o JPEG)',
+    convert: 'Vectorizar',
+    download: 'Descargar SVG',
+    error: 'No se pudo vectorizar la imagen. Prueba con una imagen simple o de menor tamaño.',
+  },
+  en: {
+    heading: 'PNG/JPEG to SVG (vectorize)',
+    file: 'Choose an image (PNG or JPEG)',
+    convert: 'Vectorize',
+    download: 'Download SVG',
+    error: 'Could not vectorize the image. Try a simpler or smaller image.',
+  },
+}[lang];
+---
+
+<section class="tool">
+  <h1>{t.heading}</h1>
+  <form id="svg-form">
+    <label>{t.file}<input type="file" id="file" accept="image/png,image/jpeg" required /></label>
+    <button type="submit">{t.convert}</button>
+  </form>
+  <p id="error" role="alert" hidden>{t.error}</p>
+  <a id="download" hidden download>{t.download}</a>
+</section>
+
+<script>
+  import { rasterToSvg } from '../../lib/svg';
+
+  const form = document.querySelector<HTMLFormElement>('#svg-form')!;
+  const errorEl = document.querySelector<HTMLParagraphElement>('#error')!;
+  const downloadEl = document.querySelector<HTMLAnchorElement>('#download')!;
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    errorEl.hidden = true;
+    downloadEl.hidden = true;
+
+    const fileInput = document.querySelector<HTMLInputElement>('#file')!;
+    const file = fileInput.files?.[0];
+    if (!file) return;
+
+    try {
+      const bitmap = await createImageBitmap(file);
+      const svg = await rasterToSvg(bitmap);
+      const blob = new Blob([svg], { type: 'image/svg+xml' });
+      downloadEl.href = URL.createObjectURL(blob);
+      downloadEl.download = 'vectorized.svg';
+      downloadEl.hidden = false;
+    } catch {
+      errorEl.hidden = false;
+    }
+  });
+</script>

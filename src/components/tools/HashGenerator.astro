@@ -1,0 +1,52 @@
+---
+import type { Lang } from '../../i18n/strings';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const t = {
+  es: {
+    heading: 'Hash SHA-256 / SHA-512',
+    input: 'Texto a procesar',
+    algorithm: 'Algoritmo',
+    generate: 'Calcular hash',
+  },
+  en: {
+    heading: 'SHA-256 / SHA-512 hash',
+    input: 'Text to hash',
+    algorithm: 'Algorithm',
+    generate: 'Compute hash',
+  },
+}[lang];
+---
+
+<section class="tool">
+  <h1>{t.heading}</h1>
+  <form id="hash-form">
+    <label>{t.input}<textarea id="text" rows="6"></textarea></label>
+    <label>{t.algorithm}
+      <select id="algorithm">
+        <option value="SHA-256">SHA-256</option>
+        <option value="SHA-512">SHA-512</option>
+      </select>
+    </label>
+    <button type="submit">{t.generate}</button>
+  </form>
+  <output id="result" style="display:block; font-family: monospace; word-break: break-all;"></output>
+</section>
+
+<script>
+  import { hashText, type HashAlgorithm } from '../../lib/hash';
+
+  const form = document.querySelector<HTMLFormElement>('#hash-form')!;
+  const resultEl = document.querySelector<HTMLOutputElement>('#result')!;
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const text = document.querySelector<HTMLTextAreaElement>('#text')!.value;
+    const algorithm = document.querySelector<HTMLSelectElement>('#algorithm')!.value as HashAlgorithm;
+    resultEl.textContent = await hashText(text, algorithm);
+  });
+</script>

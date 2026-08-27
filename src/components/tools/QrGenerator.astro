@@ -1,0 +1,54 @@
+---
+import type { Lang } from '../../i18n/strings';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const t = {
+  es: {
+    heading: 'Generador de código QR',
+    input: 'Texto o URL',
+    generate: 'Generar QR',
+    error: 'No se pudo generar el código QR.',
+  },
+  en: {
+    heading: 'QR code generator',
+    input: 'Text or URL',
+    generate: 'Generate QR',
+    error: 'Could not generate the QR code.',
+  },
+}[lang];
+---
+
+<section class="tool">
+  <h1>{t.heading}</h1>
+  <form id="qr-form">
+    <label>{t.input}<input type="text" id="text" required /></label>
+    <button type="submit">{t.generate}</button>
+  </form>
+  <p id="error" role="alert" hidden>{t.error}</p>
+  <div id="qr-output"></div>
+</section>
+
+<script>
+  import { generateQrSvg } from '../../lib/qr';
+
+  const form = document.querySelector<HTMLFormElement>('#qr-form')!;
+  const errorEl = document.querySelector<HTMLParagraphElement>('#error')!;
+  const outputEl = document.querySelector<HTMLDivElement>('#qr-output')!;
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    errorEl.hidden = true;
+    outputEl.innerHTML = '';
+
+    const text = document.querySelector<HTMLInputElement>('#text')!.value;
+    try {
+      outputEl.innerHTML = await generateQrSvg(text);
+    } catch {
+      errorEl.hidden = false;
+    }
+  });
+</script>

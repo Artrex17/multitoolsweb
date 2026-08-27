@@ -1,0 +1,73 @@
+---
+import type { Lang } from '../../i18n/strings';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const t = {
+  es: {
+    heading: 'SVG a PNG/JPEG',
+    file: 'Elige un archivo SVG',
+    format: 'Formato de salida',
+    convert: 'Convertir',
+    download: 'Descargar resultado',
+    error: 'No se pudo procesar el SVG. Comprueba que el archivo sea válido.',
+  },
+  en: {
+    heading: 'SVG to PNG/JPEG',
+    file: 'Choose an SVG file',
+    format: 'Output format',
+    convert: 'Convert',
+    download: 'Download result',
+    error: 'Could not process the SVG. Check that the file is valid.',
+  },
+}[lang];
+---
+
+<section class="tool">
+  <h1>{t.heading}</h1>
+  <form id="svg-to-img-form">
+    <label>{t.file}<input type="file" id="file" accept="image/svg+xml" required /></label>
+    <label>{t.format}
+      <select id="format">
+        <option value="image/png">PNG</option>
+        <option value="image/jpeg">JPEG</option>
+      </select>
+    </label>
+    <button type="submit">{t.convert}</button>
+  </form>
+  <p id="error" role="alert" hidden>{t.error}</p>
+  <a id="download" hidden download>{t.download}</a>
+</section>
+
+<script>
+  import { svgToRaster } from '../../lib/svg';
+
+  const form = document.querySelector<HTMLFormElement>('#svg-to-img-form')!;
+  const errorEl = document.querySelector<HTMLParagraphElement>('#error')!;
+  const downloadEl = document.querySelector<HTMLAnchorElement>('#download')!;
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    errorEl.hidden = true;
+    downloadEl.hidden = true;
+
+    const fileInput = document.querySelector<HTMLInputElement>('#file')!;
+    const file = fileInput.files?.[0];
+    if (!file) return;
+
+    const mimeType = document.querySelector<HTMLSelectElement>('#format')!.value as 'image/png' | 'image/jpeg';
+
+    try {
+      const svgText = await file.text();
+      const blob = await svgToRaster(svgText, mimeType);
+      downloadEl.href = URL.createObjectURL(blob);
+      downloadEl.download = `converted.${mimeType === 'image/png' ? 'png' : 'jpg'}`;
+      downloadEl.hidden = false;
+    } catch {
+      errorEl.hidden = false;
+    }
+  });
+</script>

@@ -1,0 +1,14 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { tools } from '../../i18n/strings';
+---
+
+<Layout lang="en" title="Free online tools — Tools" description="Convert images, format data, and generate QR codes, hashes, UUIDs and passwords, all in your browser.">
+  <h1>Free online tools</h1>
+  <p>Everything runs in your browser: your files are never uploaded to a server.</p>
+  <ul>
+    {tools.en.map((tool) => (
+      <li><a href={tool.href}>{tool.label}</a></li>
+    ))}
+  </ul>
+</Layout>

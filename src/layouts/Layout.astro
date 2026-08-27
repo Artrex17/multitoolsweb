@@ -1,0 +1,71 @@
+---
+import Nav from '../components/Nav.astro';
+import AdSlot from '../components/AdSlot.astro';
+import type { Lang } from '../i18n/strings';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+}
+const { lang, title, description } = Astro.props;
+const currentPath = new URL(Astro.request.url).pathname.replace(/\/$/, '') || `/${lang}`;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" />
+  </head>
+  <body>
+    <Nav lang={lang} currentPath={currentPath} />
+    <div class="page">
+      <AdSlot slot="1111111111" variant="sidebar" />
+      <main>
+        <AdSlot slot="2222222222" variant="horizontal" />
+        <slot />
+      </main>
+      <AdSlot slot="3333333333" variant="sidebar" />
+    </div>
+    <footer>
+      <p>© {new Date().getFullYear()} {title.split(' — ')[1] ?? title}</p>
+    </footer>
+
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: system-ui, sans-serif;
+      }
+      body {
+        margin: 0;
+      }
+      .page {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1rem;
+      }
+      main {
+        flex: 1;
+        min-width: 0;
+      }
+      @media (max-width: 900px) {
+        .page :global(.ad-slot.sidebar) {
+          display: none;
+        }
+      }
+      footer {
+        text-align: center;
+        padding: 1rem;
+        font-size: 0.85rem;
+        color: #888;
+      }
+    </style>
+  </body>
+</html>
